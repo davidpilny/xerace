@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Racing Results</title>
+</head>
+<body>
+<table id="resultsTable" border="1">
+    <thead>
+    <tr></tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    // Replace this with your Google Sheet URL
+    var googleSheetURL = 'https://docs.google.com/spreadsheets/d/1XD2e9fLXHR1KrRZhT2kAsmAlLM_vheiF_CDBQEuVWB4';
+
+    // Function to load data from the Google Sheet
+    function loadGoogleSheet() {
+        fetch(googleSheetURL)
+            .then(response => response.text())
+            .then(data => {
+                // Parse the CSV data
+                var lines = data.split('\n');
+                var table = document.getElementById('resultsTable');
+
+                // Create table header
+                var headerRow = table.getElementsByTagName('thead')[0].getElementsByTagName('tr')[0];
+                var headerItems = lines[0].split(',');
+                for (var i = 0; i < headerItems.length; i++) {
+                    var th = document.createElement('th');
+                    th.textContent = headerItems[i];
+                    headerRow.appendChild(th);
+                }
+
+                // Create table rows
+                var tbody = table.getElementsByTagName('tbody')[0];
+                for (var j = 1; j < lines.length; j++) {
+                    var row = tbody.insertRow(-1);
+                    var items = lines[j].split(',');
+                    for (var k = 0; k < items.length; k++) {
+                        var cell = row.insertCell(-1);
+                        cell.textContent = items[k];
+                    }
+                }
+            })
+            .catch(function (error) {
+                // Handle any errors
+                console.error('Error:', error);
+            });
+    }
+
+    // Load the Google Sheet
+    loadGoogleSheet();
+</script>
+</body>
+</html>
